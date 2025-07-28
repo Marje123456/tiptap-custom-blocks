@@ -96,11 +96,93 @@ const CounterBlock = TipTapNode.create({
   },
 });
 
-// Tipos para las props del diálogo de imagen
-interface ImageDialogProps {
-  onInsert: (url: string) => void;
+// Interfaces para los diálogos
+interface DialogProps {
+  onInsert: (data: any) => void;
   onClose: () => void;
 }
+
+interface ImageDialogProps extends DialogProps {
+  onInsert: (url: string) => void;
+}
+
+interface CTADialogProps extends DialogProps {
+  onInsert: (data: { text: string; url: string; newTab: boolean }) => void;
+}
+
+// Componente para el diálogo de CTA
+const CTADialog: React.FC<CTADialogProps> = ({ onInsert, onClose }) => {
+  const [text, setText] = useState('Haz clic aquí');
+  const [url, setUrl] = useState('https://');
+  const [newTab, setNewTab] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (text && url) {
+      onInsert({ text, url, newTab });
+      onClose();
+    }
+  };
+
+  return (
+    <div className="dialog-overlay">
+      <div className="dialog">
+        <h3>Insertar Llamado a la Acción</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Texto del botón:</label>
+            <input
+              ref={inputRef}
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Ej: Suscríbete ahora"
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>URL de destino:</label>
+            <input
+              type="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://ejemplo.com"
+              required
+            />
+          </div>
+          
+          <div className="form-group checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                checked={newTab}
+                onChange={(e) => setNewTab(e.target.checked)}
+              />
+              Abrir en nueva pestaña
+            </label>
+          </div>
+          
+          <div className="dialog-buttons">
+            <button type="button" onClick={onClose} className="cancel-button">
+              Cancelar
+            </button>
+            <button type="submit" className="insert-button">
+              Insertar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 // Componente para el diálogo de carga de imagen
 const ImageDialog: React.FC<ImageDialogProps> = ({ onInsert, onClose }) => {
@@ -152,13 +234,108 @@ const ImageDialog: React.FC<ImageDialogProps> = ({ onInsert, onClose }) => {
 export const TiptapEditor = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showImageDialog, setShowImageDialog] = useState(false);
+  const [showCTADialog, setShowCTADialog] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const [menuQuery, setMenuQuery] = useState('');
 
-  const editor = useEditor({
+  // Extensión personalizada para el bloque CTA
+const CTABlock = TipTapNode.create({
+  name: 'cta',
+  group: 'block',
+  content: 'inline*',
+  defining: true,
+  
+  addAttributes() {
+    return {
+      text: {
+        default: 'Haz clic aquí',
+      },
+      url: {
+        default: 'https://',
+      },
+      newTab: {
+        default: true,
+      },
+    };
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'div[data-type="cta"]',
+      },
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return [
+      'div', 
+      { 
+        'data-type': 'cta',
+        'data-url': HTMLAttributes.url || 'https://',
+        'data-new-tab': HTMLAttributes.newTab !== false,
+        class: 'cta-block'
+      }, 
+      [
+        'a', 
+        { 
+          href: HTMLAttributes.url || '#',
+          target: HTMLAttributes.newTab !== false ? '_blank' : '_self',
+          rel: 'noopener noreferrer',
+          class: 'cta-button'
+        },
+        HTMLAttributes.text || 'Haz clic aquí'
+      ]
+    ];
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(({ node, updateAttributes }) => {
+      const text = node.attrs.text || 'Haz clic aquí';
+      const url = node.attrs.url || 'https://';
+      const newTab = node.attrs.newTab !== false;
+
+      const handleClick = (e: React.MouseEvent) => {
+        // Prevenir la propagación para que TipTap no maneje el evento
+        e.stopPropagation();
+        
+        if (newTab) {
+          window.open(url, '_blank', 'noopener,noreferrer');
+        } else {
+          window.location.href = url;
+        }
+      };
+
+      return (
+        <NodeViewWrapper as="div" className="cta-block" contentEditable={false}>
+          <button 
+            className="cta-button"
+            onClick={handleClick}
+            style={{
+              cursor: 'pointer',
+              border: 'none',
+              background: 'none',
+              padding: 0,
+              font: 'inherit',
+              color: 'inherit',
+              textAlign: 'inherit',
+              textDecoration: 'none',
+              display: 'inline-block'
+            }}
+          >
+            {text}
+          </button>
+        </NodeViewWrapper>
+      );
+    });
+  },
+});
+
+const editor = useEditor({
     extensions: [
       StarterKit,
       CounterBlock,
+      CTABlock,
       Image.configure({
         inline: true,
         allowBase64: false,
@@ -195,6 +372,20 @@ export const TiptapEditor = () => {
     }
   }, [editor]);
 
+  const showCTADialogHandler = useCallback(() => {
+    setShowCTADialog(true);
+    setShowMenu(false);
+  }, []);
+
+  const insertCTA = useCallback(({ text, url, newTab }: { text: string; url: string; newTab: boolean }) => {
+    if (editor) {
+      editor.commands.insertContent({
+        type: 'cta',
+        attrs: { text, url, newTab },
+      });
+    }
+  }, [editor]);
+
   const showImageDialogHandler = useCallback(() => {
     setShowImageDialog(true);
     setShowMenu(false);
@@ -217,6 +408,11 @@ export const TiptapEditor = () => {
       description: 'Inserta una imagen desde una URL',
       onSelect: showImageDialogHandler,
     },
+    {
+      title: 'Botón CTA',
+      description: 'Añade un botón de llamado a la acción',
+      onSelect: showCTADialogHandler,
+    },
   ];
 
   const filteredCommands = commands.filter(command =>
@@ -232,6 +428,13 @@ export const TiptapEditor = () => {
         <ImageDialog
           onInsert={insertImage}
           onClose={() => setShowImageDialog(false)}
+        />
+      )}
+      
+      {showCTADialog && (
+        <CTADialog
+          onInsert={insertCTA}
+          onClose={() => setShowCTADialog(false)}
         />
       )}
       

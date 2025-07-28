@@ -344,7 +344,7 @@ const editor = useEditor({
         },
       }),
     ],
-    content: '<p>Escribe / para ver los comandos</p>',
+    content: '<p></p>',
     onUpdate: ({ editor }) => {
       const { state } = editor;
       const { selection } = state;

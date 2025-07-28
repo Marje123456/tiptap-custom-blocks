@@ -7,7 +7,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>Editor de Bloques</h1>
-        <p>TipTap</p>
+        <p>Escribe / para ver los comandos disponibles</p>
       </header>
       <main className="app-main">
         <TiptapEditor />

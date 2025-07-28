@@ -21,7 +21,7 @@
   outline: none;
 }
 
-/* Estilos para el menú de comandos */
+/* menú de comandos */
 .command-menu {
   background: white;
   border: 1px solid #e2e8f0;
@@ -89,7 +89,7 @@
   font-style: italic;
 }
 
-/* Estilos para el bloque de contador */
+/* bloque de contador */
 .counter-block {
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@
   background-color: #4338ca;
 }
 
-/* Estilos para los párrafos y encabezados en el editor */
+/* párrafos y encabezados en el editor */
 .ProseMirror p {
   margin: 0.75rem 0;
   line-height: 1.625;
@@ -145,7 +145,7 @@
 .ProseMirror h5 { font-size: 1rem; }
 .ProseMirror h6 { font-size: 0.875rem; }
 
-/* Estilos para listas */
+/* listas */
 .ProseMirror ul,
 .ProseMirror ol {
   padding-left: 1.5rem;
@@ -156,7 +156,7 @@
   margin: 0.25rem 0;
 }
 
-/* Estilos para los diálogos */
+/* diálogos */
 .dialog-overlay {
   position: fixed;
   top: 0;

@@ -9,7 +9,7 @@ import './TiptapEditor.css';
 
 // Extensión personalizada para el bloque de contador
 const CounterBlock = TipTapNode.create({
-  name: 'counter',  // Cambiado a 'counter' para que coincida con el tipo de nodo
+  name: 'counter',  // lo cambié a 'counter' para que coincida con el tipo de nodo
   group: 'block',
   content: 'inline*',
   defining: true,

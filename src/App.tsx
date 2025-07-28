@@ -6,8 +6,8 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Editor de Bloques Personalizados</h1>
-        <p>Escribe / para ver los comandos disponibles</p>
+        <h1>Editor de Bloques</h1>
+        <p>TipTap</p>
       </header>
       <main className="app-main">
         <TiptapEditor />

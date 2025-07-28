@@ -1,38 +1,142 @@
-.App {
-  text-align: center;
+/* Estilos generales de la aplicación */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+  color: #1e293b;
+  line-height: 1.5;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  background-color: #f1f5f9;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Layout de la aplicación */
+.app {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 100vh;
+}
+
+.app-header {
+  background-color: #4f46e5;
   color: white;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.App-link {
-  color: #61dafb;
+.app-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.app-header p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.app-main {
+  flex: 1;
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 1.5rem;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .app-main {
+    padding: 1rem 0.5rem;
   }
+}
+
+/* Estilos para el contenedor principal del editor */
+.editor-wrapper {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  max-width: 800px;
+  overflow: hidden;
+}
+
+/* Estilos para el menú de formato */
+.menu-bar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.menu-button {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  color: #475569;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s;
+}
+
+.menu-button:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.menu-button.is-active {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Estilos para los bloques de contenido */
+.content-block {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #e2e8f0;
+  transition: background-color 0.2s;
+}
+
+.content-block:hover {
+  background-color: #f8fafc;
+}
+
+/* Estilos para el menú de comandos */
+.command-menu {
+  z-index: 1000;
+}
+
+/* Estilos para el contenedor del editor */
+.editor-content {
+  min-height: 300px;
+  padding: 1rem;
+  outline: none;
 }

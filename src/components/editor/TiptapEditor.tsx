@@ -7,31 +7,9 @@ import { NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import './TiptapEditor.css';
 
-// Componente React para el contador
-const CounterComponent = ({ node, updateAttributes }: { node: ProseMirrorNode, updateAttributes: (attrs: Record<string, any>) => void }) => {
-  const count = node.attrs.count || 0;
-  
-  const increment = () => {
-    updateAttributes({
-      count: count + 1,
-    });
-  };
-
-  return (
-    <NodeViewWrapper className="counter-block">
-      <div className="counter-content">
-        <div className="counter-value">Contador: {count}</div>
-        <button className="counter-button" onClick={increment}>
-          Incrementar
-        </button>
-      </div>
-    </NodeViewWrapper>
-  );
-};
-
 // Extensión personalizada para el bloque de contador
 const CounterBlock = TipTapNode.create({
-  name: 'counterBlock',
+  name: 'counter',  // Cambiado a 'counter' para que coincida con el tipo de nodo
   group: 'block',
   content: 'inline*',
   defining: true,
@@ -40,6 +18,12 @@ const CounterBlock = TipTapNode.create({
     return {
       count: {
         default: 0,
+        parseHTML: element => ({
+          count: parseInt(element.getAttribute('data-count') || '0', 10)
+        }),
+        renderHTML: attributes => ({
+          'data-count': attributes.count
+        })
       },
     };
   },
@@ -55,14 +39,60 @@ const CounterBlock = TipTapNode.create({
   renderHTML({ HTMLAttributes }) {
     return [
       'div', 
-      { 'data-type': 'counter' }, 
-      ['div', { class: 'counter-value' }, `Contador: ${HTMLAttributes.count}`], 
-      ['button', { class: 'counter-button' }, 'Incrementar']
+      { 
+        'data-type': 'counter',
+        'data-count': HTMLAttributes.count || 0,
+        class: 'counter-block'
+      }, 
+      [
+        'div', 
+        { 
+          class: 'counter-content',
+          'data-count': HTMLAttributes.count || 0
+        },
+        [
+          'div', 
+          { class: 'counter-value' }, 
+          `Contador: ${HTMLAttributes.count || 0}`
+        ],
+        [
+          'button', 
+          { 
+            class: 'counter-button', 
+            type: 'button',
+            'data-count': HTMLAttributes.count || 0
+          }, 
+          'Incrementar'
+        ]
+      ]
     ];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(CounterComponent);
+    return ReactNodeViewRenderer(({ node, updateAttributes }) => {
+      const count = node.attrs.count || 0;
+      
+      const increment = () => {
+        updateAttributes({
+          count: count + 1,
+        });
+      };
+
+      return (
+        <NodeViewWrapper as="div" className="counter-block" data-count={count}>
+          <div className="counter-content">
+            <div className="counter-value">Contador: {count}</div>
+            <button 
+              type="button" 
+              className="counter-button" 
+              onClick={increment}
+            >
+              Incrementar
+            </button>
+          </div>
+        </NodeViewWrapper>
+      );
+    });
   },
 });
 

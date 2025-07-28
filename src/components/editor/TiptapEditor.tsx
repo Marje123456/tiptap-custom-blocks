@@ -110,7 +110,7 @@ interface CTADialogProps extends DialogProps {
   onInsert: (data: { text: string; url: string; newTab: boolean }) => void;
 }
 
-// Componente para el diálogo de CTA
+// para el diálogo de llamado a la accion
 const CTADialog: React.FC<CTADialogProps> = ({ onInsert, onClose }) => {
   const [text, setText] = useState('Haz clic aquí');
   const [url, setUrl] = useState('https://');
@@ -184,7 +184,7 @@ const CTADialog: React.FC<CTADialogProps> = ({ onInsert, onClose }) => {
   );
 };
 
-// Componente para el diálogo de carga de imagen
+// carga de imagen
 const ImageDialog: React.FC<ImageDialogProps> = ({ onInsert, onClose }) => {
   const [url, setUrl] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -238,7 +238,7 @@ export const TiptapEditor = () => {
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const [menuQuery, setMenuQuery] = useState('');
 
-  // Extensión personalizada para el bloque CTA
+  // Extensión personalizada para el bloqu llaado a la accion
 const CTABlock = TipTapNode.create({
   name: 'cta',
   group: 'block',
@@ -296,7 +296,7 @@ const CTABlock = TipTapNode.create({
       const newTab = node.attrs.newTab !== false;
 
       const handleClick = (e: React.MouseEvent) => {
-        // Prevenir la propagación para que TipTap no maneje el evento
+        //  para que TipTap no maneje el evento por eeroe
         e.stopPropagation();
         
         if (newTab) {

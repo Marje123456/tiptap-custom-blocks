@@ -1,4 +1,4 @@
-/* Estilos generales de la aplicación */
+/* Estilos generales  */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -20,7 +20,7 @@ code {
   font-size: 0.875em;
 }
 
-/* Layout de la aplicación */
+/* Layout  */
 .app {
   display: flex;
   flex-direction: column;
@@ -64,7 +64,7 @@ code {
   font-size: 0.875rem;
 }
 
-/* Estilos responsivos */
+/*  responsivos */
 @media (max-width: 768px) {
   .app-header h1 {
     font-size: 1.5rem;
@@ -75,7 +75,7 @@ code {
   }
 }
 
-/* Estilos para el contenedor principal del editor */
+/*  para el contenedor principal del editor */
 .editor-wrapper {
   background: white;
   border-radius: 0.5rem;
@@ -85,7 +85,7 @@ code {
   overflow: hidden;
 }
 
-/* Estilos para el menú de formato */
+/*  para el menú de formato */
 .menu-bar {
   display: flex;
   gap: 0.5rem;
@@ -116,7 +116,7 @@ code {
   color: #1e293b;
 }
 
-/* Estilos para los bloques de contenido */
+/*  para los bloques de contenido */
 .content-block {
   margin: 0.5rem 0;
   padding: 0.5rem;
@@ -129,12 +129,12 @@ code {
   background-color: #f8fafc;
 }
 
-/* Estilos para el menú de comandos */
+/*  para el menú de comandos */
 .command-menu {
   z-index: 1000;
 }
 
-/* Estilos para el contenedor del editor */
+/*  para el contenedor del editor */
 .editor-content {
   min-height: 300px;
   padding: 1rem;

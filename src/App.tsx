@@ -13,7 +13,7 @@ function App() {
         <TiptapEditor />
       </main>
       <footer className="app-footer">
-        <p>Demo de editor con bloques personalizados usando TipTap</p>
+        <p></p>
       </footer>
     </div>
   );
